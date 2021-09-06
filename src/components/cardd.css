@@ -1,0 +1,12 @@
+.card {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    min-width: 300px;
+    max-width: 33%;
+    
+}
+.card-title {
+ text-align: left;
+}
