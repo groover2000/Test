@@ -1,0 +1,68 @@
+.cards {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin: 28px;
+    padding: 7px 16px;
+    width: calc(33% - 56px);
+    border: 1px solid black;
+    text-align: left;
+    cursor: grab;
+    position: relative;
+}
+.cards-link{
+    position: absolute;
+    top: 0;
+    left:0;
+    content: '';
+    width: 400px;
+    height: 150px;
+}
+.cards-title {
+    text-align: left;
+ font-size: 20px;
+}
+
+.cards-body {
+    display: flex;
+    align-items: center;
+}
+.cards-star{
+    display: inline-block;
+    padding: 10px 30px;
+    position: relative;
+}
+.cards-star::before {
+    position: absolute;
+    content: url(".././Rectangle 5.png") ;
+    top:10px;
+    width: 18px;
+    left: -5px;
+    color: red;
+}
+.cards-img{
+    max-width: 50px;
+    border-radius: 100%;
+}
+
+.break-me {
+    color: red;
+}
+
+.cards-form{
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+    
+}
+.cars-form__input {
+    padding: 13px 15px;
+    width: 80%;
+   
+}
+.cars-form__btn {
+    width: 20%;
+    height: 53px;
+    background-color: blue;
+   
+}
