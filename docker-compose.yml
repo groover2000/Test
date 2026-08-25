@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: phone-directory-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: phone_directory
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - phone_directory_data:/var/lib/postgres/data
+
+volumes:
+  phone_directory_data:
