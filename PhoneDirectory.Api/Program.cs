@@ -1,7 +1,8 @@
 using PhoneDirectory.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using PhoneDirectory.Api.Data;
-
+using PhoneDirectory.Api.Exceptions;
+using PhoneDirectory.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<PersonDirectory>();
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 var app = builder.Build();
 
@@ -23,6 +26,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+
+app.UseExceptionHandler();
+app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseHttpsRedirection();
 app.MapControllers();
 

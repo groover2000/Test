@@ -1,6 +1,8 @@
 using PhoneDirectory.Api.Models;
 using PhoneDirectory.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using PhoneDirectory.Api.Exceptions;
+using Npgsql;
 
 namespace PhoneDirectory.Api.Services;
 
@@ -36,7 +38,18 @@ public class PersonDirectory
         );
 
         db.People.Add(person);
-        await db.SaveChangesAsync();
+
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch(DbUpdateException ex)
+            when (ex.InnerException is PostgresException postgresException &&
+                    postgresException.SqlState == PostgresErrorCodes.UniqueViolation)
+        {
+            throw new DuplicateEmailException(email);
+        }
+        
         return person;
     }
 
@@ -63,9 +76,7 @@ public async Task<List<Person>> Search(string? name, string? department)
     if (!string.IsNullOrWhiteSpace(name))
     {
         query = query.Where(p =>
-            p.FullName.Contains(
-                name,
-                StringComparison.OrdinalIgnoreCase));
+           EF.Functions.ILike(p.FullName, $"%{name}"));
     }
 
     if (!string.IsNullOrWhiteSpace(department))

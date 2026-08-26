@@ -11,4 +11,11 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Person> People { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Person>()
+            .HasIndex(p => p.Email)
+            .IsUnique();
+    }
 }

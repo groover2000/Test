@@ -42,13 +42,13 @@ DELETE {{PhoneDirectory.Api_HostAddress}}/api/people/3
 Content-Type: application/json
 ###
 
-GET {{PhoneDirectory.Api_HostAddress}}/api/people/search?name=Иван&department=IT
+GET {{PhoneDirectory.Api_HostAddress}}/api/people/search?name=Алексей ан&department=IT
 Content-Type: application/json
 
 ###
 
 
-PUT {{PhoneDirectory.Api_HostAddress}}/api/people/3
+PUT {{PhoneDirectory.Api_HostAddress}}/api/people/2
 Content-Type: application/json
 
 {
