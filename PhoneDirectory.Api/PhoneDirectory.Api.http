@@ -10,14 +10,18 @@ Accept: application/json
 
 ###
 
+GET {{PhoneDirectory.Api_HostAddress}}/api/people?page=1&pageSize=2
+Accept: application/json
+###
+
 POST {{PhoneDirectory.Api_HostAddress}}/api/people
 Content-Type: application/json
 
 {
-  "fullName": "Сидоров Алексей Сергеевич",
+  "fullName": "Семенов Алексей Сергеевич",
   "department": "IT",
   "phone": "+7 900 111-22-33",
-  "email": "sidorov@example.com",
+  "email": "semenov@example.com",
   "position": "Разработчик",
   "age": 28
 }
@@ -42,7 +46,7 @@ DELETE {{PhoneDirectory.Api_HostAddress}}/api/people/3
 Content-Type: application/json
 ###
 
-GET {{PhoneDirectory.Api_HostAddress}}/api/people/search?name=Алексей ан&department=IT
+GET {{PhoneDirectory.Api_HostAddress}}/api/people/search?department=IT
 Content-Type: application/json
 
 ###
