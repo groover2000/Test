@@ -3,6 +3,7 @@ using PhoneDirectory.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using PhoneDirectory.Api.Exceptions;
 using Npgsql;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PhoneDirectory.Api.Services;
 
@@ -17,6 +18,21 @@ public class PersonDirectory
         this.db = db;
 
     }
+    #endregion
+
+    #region GetPeople
+    public async Task<PagedResultDto<Person>> GetPeople(
+        PeopleQueryDto query
+    )
+    {
+        IQueryable<Person> people = db.People;
+
+        if (!string.IsNullOrWhiteSpace(query.Department))
+        {
+            people
+        }
+    }
+
     #endregion
     #region PersonAdd
     public async Task<Person> PersonAdd(
@@ -117,26 +133,23 @@ public class PersonDirectory
     }
     #endregion
     #region GetSortedByName
-    public async Task<PagedResultDto<Person>> GetSortedByName(
-        int page,
-        int pageSize
-    )
+    public async Task<PagedResultDto<Person>> GetSortedByName(PeopleQueryDto query)
     {
         PagedResultDto<Person> result = new();
 
-        result.Page = page;
+        result.Page = query.Page;
         
-        result.PageSize = pageSize;
+        result.PageSize = query.PageSize;
         
         result.TotalCount = await db.People.CountAsync();
         
         result.TotalPages = (int)Math.Ceiling(
-            (double)result.TotalCount / pageSize);
+            (double)result.TotalCount / query.PageSize);
         
         result.Items = await db.People
             .OrderBy(person => person.FullName)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
+            .Skip((query.Page - 1) * query.PageSize)
+            .Take(query.PageSize)
             .ToListAsync();
 
         return result;

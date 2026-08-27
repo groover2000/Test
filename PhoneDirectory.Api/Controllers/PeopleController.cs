@@ -18,13 +18,10 @@ public class PeopleController: ControllerBase
 #endregion
 #region Get
     [HttpGet]
-    public async Task<IActionResult> Get(
-        int page = 1,
-        int pageSize = 10
-    )
+    public async Task<IActionResult> Get([FromQuery] PeopleQueryDto query)
     {
         
-        return Ok(await directory.GetSortedByName(page, pageSize));
+        return Ok(await directory.GetSortedByName(query));
     }
 #endregion
 #region  GetById

@@ -6,12 +6,12 @@ Accept: application/json
 ###
 
 GET {{PhoneDirectory.Api_HostAddress}}/api/people
-Accept: application/json
+
 
 ###
 
 GET {{PhoneDirectory.Api_HostAddress}}/api/people?page=1&pageSize=2
-Accept: application/json
+
 ###
 
 POST {{PhoneDirectory.Api_HostAddress}}/api/people
