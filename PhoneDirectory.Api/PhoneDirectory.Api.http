@@ -14,6 +14,10 @@ GET {{PhoneDirectory.Api_HostAddress}}/api/people?page=1&pageSize=2
 
 ###
 
+GET {{PhoneDirectory.Api_HostAddress}}/api/people?name=Петров
+
+###
+
 POST {{PhoneDirectory.Api_HostAddress}}/api/people
 Content-Type: application/json
 

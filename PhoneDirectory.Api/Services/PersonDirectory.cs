@@ -3,13 +3,13 @@ using PhoneDirectory.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using PhoneDirectory.Api.Exceptions;
 using Npgsql;
-using Microsoft.AspNetCore.Mvc;
+
 
 namespace PhoneDirectory.Api.Services;
 
 public class PersonDirectory
 {
-    #region Main
+
     private readonly AppDbContext db;
 
     public PersonDirectory(AppDbContext db)
@@ -18,23 +18,52 @@ public class PersonDirectory
         this.db = db;
 
     }
-    #endregion
 
-    #region GetPeople
     public async Task<PagedResultDto<Person>> GetPeople(
         PeopleQueryDto query
     )
     {
         IQueryable<Person> people = db.People;
 
-        if (!string.IsNullOrWhiteSpace(query.Department))
+        if (!string.IsNullOrWhiteSpace(query.Name))
         {
-            people
+            people = people.Where(p =>
+                EF.Functions.ILike(
+                    p.FullName,
+                    $"{query.Name}%"
+                ));
         }
+
+        if(!string.IsNullOrWhiteSpace(query.Department))
+        {
+            people = people.Where(p =>
+            p.Department == query.Department
+            );
+        }
+
+        int totalCount = await people.CountAsync();
+
+        List<Person> items = await people
+            .OrderBy(p => p.FullName)
+            .Skip((query.Page - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .ToListAsync();
+
+        int totalPages = (int)Math.Ceiling(
+            (double)totalCount / query.PageSize
+        );
+
+
+        return new PagedResultDto<Person>
+        {
+            Items = items,
+            Page = query.Page,
+            PageSize = query.PageSize,
+            TotalCount = totalCount,
+            TotalPages = totalPages
+        };
     }
 
-    #endregion
-    #region PersonAdd
     public async Task<Person> PersonAdd(
         string fullname,
         string department,
@@ -69,101 +98,26 @@ public class PersonDirectory
         return person;
     }
 
-    #endregion
-    #region Add
-    public void Add(Person person)
-    {
-        db.People.Add(person);
-        db.SaveChanges();
-    }
+   
+    
 
-    #endregion
-    #region Count
-    public int Count()
-    {
-        return db.People.Count();
-    }
-    #endregion
-    #region Search
-    public async Task<List<Person>> Search(string? name, string? department)
-    {
-        IQueryable<Person> query = db.People;
-
-        if (!string.IsNullOrWhiteSpace(name))
-        {
-            query = query.Where(p =>
-               EF.Functions.ILike(p.FullName, $"%{name}"));
-        }
-
-        if (!string.IsNullOrWhiteSpace(department))
-        {
-            query = query.Where(p =>
-                p.Department == department);
-        }
-
-        return await query
-            .OrderBy(p => p.FullName)
-            .ToListAsync();
-    }
-
-    #endregion
-    #region FindByName
-    public List<Person> FindByName(string name)
-    {
-        return db.People
-            .Where(person => person.FullName.Contains(
-                name,
-                StringComparison.OrdinalIgnoreCase))
-            .ToList();
-    }
-
-    #endregion
-    #region FindByEmail
-    public Person? FindByEmail(string email)
-    {
-        return db.People
-            .FirstOrDefault(person => person.Email == email);
-    }
-    #endregion
-    #region HasEmail
+   
     public bool HasEmail(string email)
     {
         return db.People
             .Any(person => person.Email == email);
     }
-    #endregion
-    #region GetSortedByName
-    public async Task<PagedResultDto<Person>> GetSortedByName(PeopleQueryDto query)
-    {
-        PagedResultDto<Person> result = new();
-
-        result.Page = query.Page;
-        
-        result.PageSize = query.PageSize;
-        
-        result.TotalCount = await db.People.CountAsync();
-        
-        result.TotalPages = (int)Math.Ceiling(
-            (double)result.TotalCount / query.PageSize);
-        
-        result.Items = await db.People
-            .OrderBy(person => person.FullName)
-            .Skip((query.Page - 1) * query.PageSize)
-            .Take(query.PageSize)
-            .ToListAsync();
-
-        return result;
-    }
-    #endregion
-    #region FindById
+   
+   
+   
     public async Task<Person?> FindById(int id)
     {
         return await db.People
             .FirstOrDefaultAsync(person => person.Id == id);
     }
 
-    #endregion
-    #region DeletById
+ 
+  
     public async Task<Person?> DeleteById(int id)
     {
         Person? person = await FindById(id);
@@ -176,8 +130,8 @@ public class PersonDirectory
 
         return person;
     }
-    #endregion
-    #region Update
+    
+    
     public async Task<Person?> Update(
         int id,
         string fullName,
@@ -212,5 +166,5 @@ public class PersonDirectory
 
         return person;
     }
-    #endregion
+   
 }
