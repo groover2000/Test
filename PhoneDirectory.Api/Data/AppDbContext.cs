@@ -14,8 +14,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Person>()
-            .HasIndex(p => p.Email)
-            .IsUnique();
+       modelBuilder.ApplyConfiguration(new PersonConfiguration());
     }
 }

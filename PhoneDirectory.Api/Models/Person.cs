@@ -11,15 +11,13 @@ public class Person
     public string Position { get; private set; }
     public int Age { get; private set; }
 
-    public Person()
+    private Person()
     {
-        Id = 0;
-        FullName = "Undefined";
-        Department = "Undefined";
-        Phone = "Undefined";
-        Email = "Undefined";
-        Position = "Undefined";
-        Age = 0;
+       FullName = null!;
+       Department = null!;
+       Phone = null!;
+       Email = null!;
+       Position = null!;
     }
 
     public Person(

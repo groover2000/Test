@@ -19,11 +19,12 @@ public class PersonDirectory
 
     }
 
-    public async Task<PagedResultDto<Person>> GetPeople(
+    public async Task<PagedResultDto<PersonListDto>> GetPeople(
         PeopleQueryDto query
     )
     {
-        IQueryable<Person> people = db.People;
+        IQueryable<Person> people = db.People
+            .AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(query.Name))
         {
@@ -34,7 +35,7 @@ public class PersonDirectory
                 ));
         }
 
-        if(!string.IsNullOrWhiteSpace(query.Department))
+        if (!string.IsNullOrWhiteSpace(query.Department))
         {
             people = people.Where(p =>
             p.Department == query.Department
@@ -43,10 +44,17 @@ public class PersonDirectory
 
         int totalCount = await people.CountAsync();
 
-        List<Person> items = await people
+        var items = await people
             .OrderBy(p => p.FullName)
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize)
+            .Select(p => new PersonListDto
+            {
+                Id = p.Id,
+                FullName = p.FullName,
+                Department = p.Department,
+                Phone = p.Phone
+            })
             .ToListAsync();
 
         int totalPages = (int)Math.Ceiling(
@@ -54,7 +62,7 @@ public class PersonDirectory
         );
 
 
-        return new PagedResultDto<Person>
+        return new PagedResultDto<PersonListDto>
         {
             Items = items,
             Page = query.Page,
@@ -98,26 +106,32 @@ public class PersonDirectory
         return person;
     }
 
-   
-    
 
-   
+
+
+
     public bool HasEmail(string email)
     {
         return db.People
             .Any(person => person.Email == email);
     }
-   
-   
-   
-    public async Task<Person?> FindById(int id)
+
+
+
+
+    public async Task<Person?> GetById(int id)
     {
         return await db.People
-            .FirstOrDefaultAsync(person => person.Id == id);
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
+    public async Task<Person?> FindById(int id)
+    {
+        return await db.People.FindAsync(id);
     }
 
- 
-  
+
+
     public async Task<Person?> DeleteById(int id)
     {
         Person? person = await FindById(id);
@@ -130,8 +144,8 @@ public class PersonDirectory
 
         return person;
     }
-    
-    
+
+
     public async Task<Person?> Update(
         int id,
         string fullName,
@@ -161,10 +175,10 @@ public class PersonDirectory
             age
         );
 
-
+       
         await db.SaveChangesAsync();
 
         return person;
     }
-   
+
 }

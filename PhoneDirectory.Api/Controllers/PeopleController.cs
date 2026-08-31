@@ -27,7 +27,7 @@ public class PeopleController : ControllerBase
 
     public async Task<IActionResult> GetById(int id)
     {
-        Person? person = await directory.FindById(id);
+        Person? person = await directory.GetById(id);
 
         if (person == null)
         {
