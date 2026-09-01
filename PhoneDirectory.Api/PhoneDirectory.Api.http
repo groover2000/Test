@@ -5,7 +5,7 @@ Accept: application/json
 
 ###
 
-GET {{PhoneDirectory.Api_HostAddress}}/api/people
+GET {{PhoneDirectory.Api_HostAddress}}/api/people/4
 
 
 ###

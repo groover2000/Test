@@ -27,7 +27,7 @@ public class PeopleController : ControllerBase
 
     public async Task<IActionResult> GetById(int id)
     {
-        Person? person = await directory.GetById(id);
+        PersonDetailsDto? person = await directory.GetById(id);
 
         if (person == null)
         {
@@ -48,11 +48,13 @@ public class PeopleController : ControllerBase
             dto.Position,
             dto.Age
         );
+        
+        PersonDetailsDto? result = await directory.GetById(person.Id);
 
         return CreatedAtAction(
             nameof(GetById),
             new { id = person.Id },
-            person
+            result
         );
     }
 

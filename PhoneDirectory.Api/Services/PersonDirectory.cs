@@ -53,7 +53,8 @@ public class PersonDirectory
                 Id = p.Id,
                 FullName = p.FullName,
                 Department = p.Department,
-                Phone = p.Phone
+                Phone = p.Phone,
+                Email = p.Email
             })
             .ToListAsync();
 
@@ -119,11 +120,21 @@ public class PersonDirectory
 
 
 
-    public async Task<Person?> GetById(int id)
+    public async Task<PersonDetailsDto?> GetById(int id)
     {
         return await db.People
             .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .Where(p => p.Id == id)
+            .Select(p => new PersonDetailsDto
+            {
+                Id = p.Id,
+                FullName = p.FullName,
+                Phone = p.Phone,
+                Email = p.Email,
+                Position = p.Position,
+                Department = p.Department
+            })
+            .FirstOrDefaultAsync();
     }
     public async Task<Person?> FindById(int id)
     {
