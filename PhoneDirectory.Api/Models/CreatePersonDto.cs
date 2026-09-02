@@ -11,8 +11,10 @@ public class CreatePersonDto
     [Required]
     public required string Department { get; set;}
     [Required]
+    [StringLength(20, MinimumLength = 7)]
     public required string Phone { get; set;}
     [Required]
+    [EmailAddress]
     public required string Email { get; set;}
     [Required]
     public required string Position { get; set;}

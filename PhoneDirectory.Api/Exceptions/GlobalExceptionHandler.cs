@@ -1,4 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,8 +40,34 @@ public class GlobalExceptionHandler : IExceptionHandler
             );
             return true;
         }
+
+        if (exception is PersonValidationException validationException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            ProblemDetails problemDetails = new()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Некорректные данные"
+            };
+
+            problemDetails.Extensions["errors"] =
+                new Dictionary<string, string[]>
+                {
+                    [validationException.Field] =
+                        new[] { validationException.Message }
+                };
+
+            await httpContext.Response.WriteAsJsonAsync(
+                problemDetails,
+                cancellationToken
+            );
+            return true;
+        }
         return false;
     }
+
+
 
 
 }

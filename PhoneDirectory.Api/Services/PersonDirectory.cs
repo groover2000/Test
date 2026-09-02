@@ -186,8 +186,18 @@ public class PersonDirectory
             age
         );
 
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch(DbUpdateException ex)
+            when (ex.InnerException is PostgresException postgresException
+                && postgresException.SqlState == PostgresErrorCodes.UniqueViolation) 
+        {
+            throw new DuplicateEmailException (email);
+        }
        
-        await db.SaveChangesAsync();
+        
 
         return person;
     }

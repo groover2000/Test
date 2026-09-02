@@ -13,6 +13,7 @@ public class UpdatePersonDto
     public required string Department { get; set; }
 
     [Required]
+    [StringLength(25, MinimumLength = 7)]
     public required string Phone { get; set; }
 
     [Required]

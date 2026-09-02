@@ -48,8 +48,8 @@ public class PeopleController : ControllerBase
             dto.Position,
             dto.Age
         );
-        
-        PersonDetailsDto? result = await directory.GetById(person.Id);
+
+        PersonDetailsDto result = ToDetailsDto(person);
 
         return CreatedAtAction(
             nameof(GetById),
@@ -89,11 +89,30 @@ public class PeopleController : ControllerBase
             dto.Age
         );
 
+
+
         if (person is null)
         {
             return NotFound();
         }
 
-        return Ok(person);
+        PersonDetailsDto result = ToDetailsDto(person);
+        
+
+        return Ok(result);
+    }
+
+
+    private static PersonDetailsDto ToDetailsDto(Person person)
+    {
+        return new PersonDetailsDto()
+        {
+            Id = person.Id,
+            FullName = person.FullName,
+            Department = person.Department,
+            Phone = person.Phone,
+            Email = person.Email,
+            Position = person.Position
+        };
     }
 }

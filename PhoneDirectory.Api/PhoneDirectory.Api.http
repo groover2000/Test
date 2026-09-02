@@ -5,12 +5,12 @@ Accept: application/json
 
 ###
 
-GET {{PhoneDirectory.Api_HostAddress}}/api/people/4
+GET {{PhoneDirectory.Api_HostAddress}}/api/people/
 
 
 ###
 
-GET {{PhoneDirectory.Api_HostAddress}}/api/people?page=1&pageSize=2
+GET {{PhoneDirectory.Api_HostAddress}}/api/people?page=0&pageSize=2
 
 ###
 
@@ -22,12 +22,12 @@ POST {{PhoneDirectory.Api_HostAddress}}/api/people
 Content-Type: application/json
 
 {
-  "fullName": "Семенов Алексей Сергеевич",
+  "fullName": "Семенов1 Алексей Сергеевич",
   "department": "IT",
   "phone": "+7 900 111-22-33",
-  "email": "semenov@example.com",
+  "email": "semenov122@example.com",
   "position": "Разработчик",
-  "age": 28
+  "age": 9
 }
 
 ###
@@ -35,12 +35,12 @@ POST {{PhoneDirectory.Api_HostAddress}}/api/people
 Content-Type: application/json
 
 {
-  "fullName": "",
-  "department": "",
-  "phone": "+7 900 111-22-33",
-  "email": "sidorov@example.com",
-  "position": "Разработчик",
-  "age": 28
+  "fullName": "   ",
+  "department": "IT",
+  "phone": "123",
+  "email": "new@test.com",
+  "position": "Developer",
+  "age": 18
 }
 
 ###
@@ -56,7 +56,7 @@ Content-Type: application/json
 ###
 
 
-PUT {{PhoneDirectory.Api_HostAddress}}/api/people/4
+PUT {{PhoneDirectory.Api_HostAddress}}/api/people/14
 Content-Type: application/json
 
 {

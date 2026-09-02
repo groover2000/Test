@@ -1,3 +1,4 @@
+using PhoneDirectory.Api.Exceptions;
 namespace PhoneDirectory.Api.Models;
 
 public class Person
@@ -68,20 +69,20 @@ public class Person
     {
          if (age < 18)
         {
-            throw new ArgumentException("Age incorrect");
+            throw new PersonValidationException("Age","Age field must be more then 18");
         }
 
         if (string.IsNullOrWhiteSpace(fullName))
         {
-            throw new ArgumentException("Name incorrect");
+            throw new PersonValidationException("Fullname", "Name can not be empty");
         }
         if (string.IsNullOrWhiteSpace(email))
         {
-            throw new ArgumentException("email incorrect");
+            throw new PersonValidationException("Email", "Email can not be empty");
         }
         if (string.IsNullOrWhiteSpace(phone))
         {
-            throw new ArgumentException("Phone incorrect");
+            throw new PersonValidationException("Phone", "Phone can not be empty");
         }
     }
 #endregion
